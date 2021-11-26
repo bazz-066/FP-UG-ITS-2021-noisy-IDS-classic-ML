@@ -6,12 +6,12 @@ import time
 
 def main(argv):
     try:
-        filename = "test3.pcap"
+        filename = "test2.pcap"
         protocol = "tcp"
         prt = StreamReaderThread(filename, protocol, "443")
         prt.delete_read_connections = True
         prt.start()
-        fcsv = open("test31.csv", "w")
+        fcsv = open("test2.csv", "w")
         counter = 0
 
         while not prt.done or prt.has_ready_message():
@@ -19,6 +19,7 @@ def main(argv):
                 time.sleep(0.0001)
                 continue
             buffered_packets = prt.pop_connection()
+            buffered_packets.get_byte_frequency("server")
             if buffered_packets is not None:
                 #print(buffered_packets.get_byte_frequency("client"))
                 counter += 1

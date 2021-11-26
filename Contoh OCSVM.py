@@ -10,6 +10,7 @@ def main():
         x, _ = make_blobs(n_samples=200, centers=1, cluster_std=.3, center_box=(8, 8))
         plt.scatter(x[:,0], x[:,1])
         plt.show()
+        print(x)
         svm = OneClassSVM(kernel='rbf', gamma=0.001, nu=0.03)
         print(svm)
         svm.fit(x)

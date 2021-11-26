@@ -53,8 +53,9 @@ def __calculate_byte_frequency__(payload, length):
 
     if length > 0:
         for i in range(0, 256):
-            byte_frequency[i] = float(payload.count(chr(i))) / length
+            byte_frequency[i] = float(payload.count(i)) / length
 
+    #print(byte_frequency)
     return byte_frequency
 
 

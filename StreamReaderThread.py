@@ -7,7 +7,7 @@ import pcapy
 import threading
 
 
-TIMEOUT = 2
+TIMEOUT = 1
 end_states = (STATE_CLOSE, STATE_RESET, STATE_TIMEOUT)
 
 

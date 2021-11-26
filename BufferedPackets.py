@@ -123,12 +123,12 @@ class BufferedPackets:
             return False
 
     def get_payload(self):
-        payload = ""
+        payload = []
         for frame in self.frames:
             packet = frame.child()
             segment = packet.child()
             if segment.get_data_as_string() is not None:
-                payload += segment.get_data_as_string()
+                payload.extend(segment.get_data_as_string())
 
         return payload
 
@@ -150,6 +150,8 @@ class BufferedPackets:
 
         for i in range(0, 256):
             byte_frequency[i] = float(payload.count(chr(i))) / length
+
+        print (byte_frequency)
 
         return byte_frequency
 

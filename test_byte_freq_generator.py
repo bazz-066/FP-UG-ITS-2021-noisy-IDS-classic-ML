@@ -16,8 +16,12 @@ def main():
          batch_size=10000
          data = byte_freq_generator(filename, protocol, port, batch_size)
 
+         counterdata= 0
+
          for item in data:
-             print(item)
+             counterdata=counterdata+1
+             #print(item)
+         print (counterdata)
 
      except IndexError:
          print ("IndexError")
