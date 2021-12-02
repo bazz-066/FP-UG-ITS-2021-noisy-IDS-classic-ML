@@ -1,5 +1,5 @@
-from scipy._lib.six import X
 from StreamReaderThread import StreamReaderThread
+
 import sys
 import time
 #import csv
@@ -55,7 +55,7 @@ def get_data_bytefreq():
 def ocsvm(x):
     
     svm = joblib.load('ocsvm.pkl')
-    svm.predict(X)
+    svm.predict(x)
     pred = svm.predict(x)
     print(pred)
     anom_index = where(pred==-1)

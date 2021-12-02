@@ -18,6 +18,8 @@ def main(argv):
         arr = numpy.array(final_list)
         #print(arr)
         ocsvm(arr)
+        #IsoForest(arr)
+        #lof(arr)
 
     except IndexError:
         print("Usage: python pcap_to_csv.py <pcap_filename>")
