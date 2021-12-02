@@ -5,7 +5,7 @@ import time
 #import csv
 import numpy
 import matplotlib.pyplot as plt
-from sklearn.svm import OneClassSVM
+from sklearn.ensemble import IsolationForest
 from numpy import quantile, where
 
 
@@ -14,7 +14,7 @@ def main(argv):
         final_list= get_data_bytefreq()
         arr = numpy.array(final_list)
         #print(arr)
-        ocsvm(arr)
+        IsoForest(arr)
 
     except IndexError:
         print("Usage: python pcap_to_csv.py <pcap_filename>")
@@ -49,28 +49,17 @@ def get_data_bytefreq():
     #print(final_list)
     return final_list
     
-def ocsvm(x):
+def IsoForest(x):
     plt.scatter(x[:,0], x[:,1])
     plt.show()
     print(x)
-    svm = OneClassSVM(gamma=0.001, nu=0.03)
+    svm = IsolationForest(random_state=0)
     print(svm)
     svm.fit(x)
     pred = svm.predict(x)
     print(pred)
     anom_index = where(pred==-1)
     values = x[anom_index]
-    plt.scatter(x[:,0], x[:,1])
-    plt.scatter(values[:,0], values[:,1], color='r')
-    plt.show()
-    svm = OneClassSVM(gamma=0.001, nu=0.02)
-    print(svm)
-    pred = svm.fit_predict(x)
-    scores = svm.score_samples(x)
-    thresh = quantile(scores, 0.03)
-    print(thresh)
-    index = where(scores<=thresh)
-    values = x[index]
     plt.scatter(x[:,0], x[:,1])
     plt.scatter(values[:,0], values[:,1], color='r')
     plt.show()

@@ -6,12 +6,12 @@ import time
 
 def main(argv):
     try:
-        filename = "test2.pcap"
+        filename = "test4.pcap"
         protocol = "tcp"
         prt = StreamReaderThread(filename, protocol, "443")
         prt.delete_read_connections = True
         prt.start()
-        fcsv = open("test2.csv", "w")
+        fcsv = open("test4.csv", "w")
         counter = 0
 
         while not prt.done or prt.has_ready_message():
