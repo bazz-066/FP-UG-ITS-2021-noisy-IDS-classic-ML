@@ -1,24 +1,27 @@
+from scipy._lib.six import X
 from StreamReaderThread import StreamReaderThread
-
 import sys
 import time
 #import csv
 import numpy
 import matplotlib.pyplot as plt
+from sklearn.svm import OneClassSVM
+from sklearn.ensemble import IsolationForest
 from sklearn.neighbors import LocalOutlierFactor
 from numpy import quantile, where
+import joblib
 
 
 def main(argv):
     try:
         final_list= get_data_bytefreq()
         arr = numpy.array(final_list)
-        #print(arr)
-        lof(arr)
+        ocsvm(arr)
 
     except IndexError:
         print("Usage: python pcap_to_csv.py <pcap_filename>")
 
+    
 def get_data_bytefreq():
     
     filename = "test4.pcap"
@@ -48,14 +51,11 @@ def get_data_bytefreq():
         
     #print(final_list)
     return final_list
+
+def ocsvm(x):
     
-def lof(x):
-    plt.scatter(x[:,0], x[:,1])
-    plt.show()
-    print(x)
-    svm = LocalOutlierFactor(n_neighbors=15,novelty=True)
-    print(svm)
-    svm.fit(x)
+    svm = joblib.load('ocsvm.pkl')
+    svm.predict(X)
     pred = svm.predict(x)
     print(pred)
     anom_index = where(pred==-1)
@@ -63,7 +63,29 @@ def lof(x):
     plt.scatter(x[:,0], x[:,1])
     plt.scatter(values[:,0], values[:,1], color='r')
     plt.show()
+
+def IsoForest(x):
     
+    svm = joblib.load('IsoForest.pkl')
+    pred = svm.predict(x)
+    print(pred)
+    anom_index = where(pred==-1)
+    values = x[anom_index]
+    plt.scatter(x[:,0], x[:,1])
+    plt.scatter(values[:,0], values[:,1], color='r')
+    plt.show()
+
+def lof(x):
+    
+    svm = joblib.load('lof.pkl')
+    pred = svm.predict(x)
+    print(pred)
+    anom_index = where(pred==-1)
+    values = x[anom_index]
+    plt.scatter(x[:,0], x[:,1])
+    plt.scatter(values[:,0], values[:,1], color='r')
+    plt.show()
+
 
 if __name__ == '__main__':
 	main(sys.argv)
