@@ -2,6 +2,7 @@ from StreamReaderThread import StreamReaderThread
 
 import sys
 import time
+import timeit
 #import csv
 import numpy
 import matplotlib.pyplot as plt
@@ -14,21 +15,25 @@ import joblib
 
 def main(argv):
     try:
+        start_time = timeit.default_timer()
         final_list= get_data_bytefreq()
         arr = numpy.array(final_list)
         #print(arr)
         ocsvm(arr)
-        #IsoForest(arr)
-        #lof(arr)
+        IsoForest(arr)
+        lof(arr)
+        stop = timeit.default_timer()
+        execution_time = stop - start_time
+        print("Program Executed in "+str(execution_time))
 
     except IndexError:
         print("Usage: python pcap_to_csv.py <pcap_filename>")
 
 def get_data_bytefreq():
     
-    filename = "test4.pcap"
+    filename = "noisy_port-80_percentage-0.003.pcap"
     protocol = "tcp"
-    prt = StreamReaderThread(filename, protocol, "443")
+    prt = StreamReaderThread(filename, protocol, "80")
     prt.delete_read_connections = True
     prt.start()
 
@@ -40,14 +45,14 @@ def get_data_bytefreq():
             time.sleep(0.0001)
             continue
         buffered_packets = prt.pop_connection()
-        buffered_packets.get_byte_frequency("server")
+        #buffered_packets.get_byte_frequency("server")
         if buffered_packets is not None:
             #print(buffered_packets.get_byte_frequency("client"))
             counter += 1
-            list_temp=[]
+            #list_temp=[]
             byte_frequency = buffered_packets.get_byte_frequency("server")
-            list_temp.extend(byte_frequency)
-            final_list.append(list_temp)
+            #list_temp.extend(byte_frequency)
+            final_list.append(byte_frequency)
             sys.stdout.write("\r{} flows.".format(counter))
             sys.stdout.flush()
         
@@ -55,27 +60,27 @@ def get_data_bytefreq():
     return final_list
     
 def ocsvm(x):
-    plt.scatter(x[:,0], x[:,1])
-    plt.show()
-    print(x)
+    #plt.scatter(x[:,0], x[:,1])
+    #plt.show()
+    #print(x)
     svm = OneClassSVM(gamma=0.001, nu=0.03)
     print(svm)
     svm.fit(x)
     joblib.dump(svm, 'ocsvm.pkl')
 
 def IsoForest(x):
-    plt.scatter(x[:,0], x[:,1])
-    plt.show()
-    print(x)
+    #plt.scatter(x[:,0], x[:,1])
+    #plt.show()
+    #print(x)
     svm = IsolationForest(random_state=0)
     print(svm)
     svm.fit(x)
     joblib.dump(svm, 'IsoForest.pkl')
 
 def lof(x):
-    plt.scatter(x[:,0], x[:,1])
-    plt.show()
-    print(x)
+    #plt.scatter(x[:,0], x[:,1])
+    #plt.show()
+    #print(x)
     svm = LocalOutlierFactor(n_neighbors=15,novelty=True)
     print(svm)
     svm.fit(x)
